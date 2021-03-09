@@ -55,7 +55,8 @@
 </template>
 
 <script>
-import api from "../services/config";
+// import api from "../services/config";
+import { sign_in } from "../services/oauth";
 
 export default {
   data: () => ({
@@ -88,7 +89,8 @@ export default {
           device_type: 2
         };
         try {
-          const res = await api.post("/oauth/sign_in", payload);
+          const res = await sign_in(payload);
+          localStorage.setItem("token", res.data.data.user.access_token);
           console.log(res.data);
         } catch (err) {
           console.log(err);
