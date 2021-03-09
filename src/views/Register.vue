@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data: () => ({
     valid: false,
@@ -84,9 +86,33 @@ export default {
     ],
   }),
   methods: {
-    submitGo() {
+    async submitGo() {
       if (this.valid) {
-        alert('valid');
+        const arrPhone = this.phone.split('');
+        arrPhone.splice(0, 1);
+        arrPhone.unshift('62');
+        const newPhone = arrPhone.join('');
+        const payload = {
+          phone: newPhone,
+          password: this.password,
+          country: this.country,
+          latlong: newPhone,
+          device_token: newPhone,
+          device_type: 2,
+        };
+        console.log(payload);
+        try {
+          const proxyCors = 'https://safe-ravine-02458.herokuapp.com/';
+          const instanceAxios = axios.create({
+            baseURL: `${proxyCors}http://pretest-qa.dcidev.id/api/v1`,
+            withCredentials: false,
+          });
+          const res = await instanceAxios.post('/register', payload);
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+        // console.log(payload);
       }
     },
   },

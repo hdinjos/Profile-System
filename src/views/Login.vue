@@ -34,7 +34,7 @@
                   <v-btn
                     color="primary"
                     class="mt-3 text-capitalize"
-                    @click="submitGo"
+                    @click="logIn"
                   >
                     Login
                   </v-btn>
@@ -55,29 +55,47 @@
 </template>
 
 <script>
+import api from "../services/config";
+
 export default {
   data: () => ({
     valid: false,
-    phone: '',
-    password: '',
-    country: '',
+    phone: "",
+    password: "",
     phoneRules: [
-      (v) => !!v || 'Phone is required',
-      (v) => /^[0-9]{1,20}$/.test(v) || 'Phone must number',
+      v => !!v || "Phone is required",
+      v => /^[0-9]{1,20}$/.test(v) || "Phone must number"
     ],
     passwordRules: [
-      (v) => !!v || 'Password is required',
-      (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
-        || 'Password must minimum 8 character, at least one letter and one number ',
-    ],
+      v => !!v || "Password is required",
+      v => v.length >= 8 || "Password minimum 8 characters"
+      // (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
+      //   || 'Password must minimum 8 character, at least one letter and one number ',
+    ]
   }),
   methods: {
-    submitGo() {
+    async logIn() {
       if (this.valid) {
-        alert('valid');
+        const arrPhone = this.phone.split("");
+        arrPhone.splice(0, 1);
+        arrPhone.unshift("62");
+        const newPhone = arrPhone.join("");
+        const payload = {
+          phone: newPhone,
+          password: this.password,
+          latlong: newPhone,
+          device_token: newPhone,
+          device_type: 2
+        };
+        try {
+          const res = await api.post("/oauth/sign_in", payload);
+          console.log(res.data);
+        } catch (err) {
+          console.log(err);
+        }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
