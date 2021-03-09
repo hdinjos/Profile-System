@@ -1,69 +1,81 @@
 <template>
-  <v-container>
-    <v-item-group v-model="model" class="pa-2 d-flex justify-center" mandatory>
-      <v-item v-for="([icon, bp, size], i) in sizes" :key="i" :value="size">
-        <template v-slot:default="{ active, toggle }">
-          <v-hover v-slot="{ hover }">
+  <v-container fluid>
+    <v-row justify="center" align="center" style="height: 90vh">
+      <v-col xs="11" sm="6" md="4">
+        <v-card max-height="100vh" class="pa-3" outlined>
+          <v-container>
             <div
-              :class="[active || hover ? 'text--primary' : 'text--secondary']"
-              class="ma-3 text-center"
-              style="cursor: pointer"
-              @click="toggle"
+              class="text-center text-xs-subtitle-1 text-sm-h6 text-md-h5 pb-3"
             >
-              <v-icon
-                :color="active || hover ? 'grey darken-4' : 'grey lighten-1'"
-                class="pa-1 mb-1"
-                v-text="icon"
-              ></v-icon>
-
-              <div class="caption" v-text="bp"></div>
+              Login
             </div>
-          </v-hover>
-        </template>
-      </v-item>
-    </v-item-group>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field
+                dense
+                v-model="phone"
+                :rules="phoneRules"
+                label="Phone"
+                required
+                outlined
+              ></v-text-field>
 
-    <div class="text-h5 mb-6 text-center">
-      <code v-text="typeClass"></code>
-    </div>
-
-    <v-card
-      class="d-flex align-center justify-center pa-4 mx-auto"
-      max-width="550"
-      min-height="76"
-      outlined
-    >
-      <div :class="`text-caption text-md-subtitle-2`">Example Heading</div>
-    </v-card>
+              <v-text-field
+                dense
+                v-model="password"
+                :rules="passwordRules"
+                label="Password"
+                required
+                outlined
+                type="password"
+              ></v-text-field>
+              <hr class="mx-4" />
+              <div class="d-flex flex-column align-center">
+                <div>
+                  <v-btn
+                    color="primary"
+                    class="mt-3 text-capitalize"
+                    @click="submitGo"
+                  >
+                    Login
+                  </v-btn>
+                </div>
+                <div class="mt-2">
+                  <span>Don’t have an account?</span>
+                  <router-link class="mx-2 text-decoration-none" to="/register"
+                    >Register</router-link
+                  >
+                </div>
+              </div>
+            </v-form>
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
   data: () => ({
-    model: 'caption',
-    sizes: [
-      ['mdi-devices', 'all', 'caption'],
-      ['mdi-cellphone-iphone', 'sm', 'body-2'],
-      ['mdi-laptop', 'md', 'body-1'],
-      ['mdi-monitor', 'lg', 'h6'],
-      ['mdi-television', 'xl', 'h4'],
+    valid: false,
+    phone: '',
+    password: '',
+    country: '',
+    phoneRules: [
+      (v) => !!v || 'Phone is required',
+      (v) => /^[0-9]{1,20}$/.test(v) || 'Phone must number',
+    ],
+    passwordRules: [
+      (v) => !!v || 'Password is required',
+      (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
+        || 'Password must minimum 8 character, at least one letter and one number ',
     ],
   }),
-
-  computed: {
-    typeClass() {
-      const type = ['text', this.model];
-      const [, breakpoint] = this.current;
-
-      if (breakpoint !== 'all') {
-        type.splice(1, 0, breakpoint);
+  methods: {
+    submitGo() {
+      if (this.valid) {
+        alert('valid');
       }
-
-      return `.${type.join('-')}`;
-    },
-    current() {
-      return this.sizes.find((size) => size[2] === this.model);
     },
   },
 };

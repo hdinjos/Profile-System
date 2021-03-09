@@ -75,9 +75,8 @@ export default {
     ],
     passwordRules: [
       (v) => !!v || 'Password is required',
-      (v) =>
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v) ||
-        'Password must minimum 8 character, at least one letter and one number ',
+      (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
+        || 'Password must minimum 8 character, at least one letter and one number ',
     ],
     countryRules: [
       (v) => !!v || 'Country is required',
