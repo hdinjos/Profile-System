@@ -18,6 +18,7 @@
                 required
                 outlined
                 :loading="loading"
+                ref="phone"
               ></v-text-field>
 
               <v-text-field
@@ -30,6 +31,7 @@
                 :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="() => (value = !value)"
                 :type="value ? 'password' : 'text'"
+                ref="password"
               ></v-text-field>
               <hr class="mx-4" />
               <div class="d-flex flex-column align-center">
@@ -48,24 +50,31 @@
                     >Register</router-link
                   >
                 </div>
-                <v-alert v-if="failure" type="error" dense>
+                <!-- <v-alert v-if="failure" type="error" dense>
                   {{ failure }}
-                </v-alert>
+                </v-alert> -->
               </div>
             </v-form>
           </v-container>
         </v-card>
       </v-col>
     </v-row>
-    <!-- <v-snackbar :value="failure" :timeout="timeout" color="red">
+    <v-snackbar top v-model="snackbarVal" :timeout="timeout" color="red">
       {{ failure }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn color="blue" text v-bind="attrs" @click="snackbarVal = false">
-          Close
+        <v-btn
+          x-small
+          outlined
+          v-bind="attrs"
+          @click="snackbarVal = false"
+          icon
+          color="white"
+        >
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </template>
-    </v-snackbar> -->
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -104,9 +113,18 @@ export default {
           device_type: 2
         };
         await this.$store.dispatch("oauth/getData", payload);
-        if (localStorage.getItem("token")) {
-          this.$router.push("/");
+        if (this.failure) {
+          if (this.failure === "Password is incorrect") {
+            this.snackbarVal = true;
+            this.$refs["password"].focus();
+          } else {
+            this.snackbarVal = true;
+            this.$refs["phone"].focus();
+          }
         }
+        // if (localStorage.getItem("token")) {
+        //   this.$router.push("/");
+        // }
       }
     }
   },
