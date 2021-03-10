@@ -17,6 +17,7 @@
                 label="Phone"
                 required
                 outlined
+                :loading="loading"
               ></v-text-field>
 
               <v-text-field
@@ -26,7 +27,9 @@
                 label="Password"
                 required
                 outlined
-                type="password"
+                :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="() => (value = !value)"
+                :type="value ? 'password' : 'text'"
               ></v-text-field>
               <hr class="mx-4" />
               <div class="d-flex flex-column align-center">
@@ -45,21 +48,33 @@
                     >Register</router-link
                   >
                 </div>
+                <v-alert v-if="failure" type="error" dense>
+                  {{ failure }}
+                </v-alert>
               </div>
             </v-form>
           </v-container>
         </v-card>
       </v-col>
     </v-row>
+    <!-- <v-snackbar :value="failure" :timeout="timeout" color="red">
+      {{ failure }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbarVal = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar> -->
   </v-container>
 </template>
 
 <script>
-// import api from "../services/config";
-import { sign_in } from "../services/oauth";
-
 export default {
   data: () => ({
+    snackbarVal: false,
+    timeout: 10000,
+    value: "password",
     valid: false,
     phone: "",
     password: "",
@@ -76,7 +91,7 @@ export default {
   }),
   methods: {
     async logIn() {
-      if (this.valid) {
+      if (this.valid && this.phone && this.password) {
         const arrPhone = this.phone.split("");
         arrPhone.splice(0, 1);
         arrPhone.unshift("62");
@@ -88,16 +103,29 @@ export default {
           device_token: newPhone,
           device_type: 2
         };
-        try {
-          const res = await sign_in(payload);
-          localStorage.setItem("token", res.data.data.user.access_token);
-          console.log(res.data);
-        } catch (err) {
-          console.log(err);
+        await this.$store.dispatch("oauth/getData", payload);
+        if (localStorage.getItem("token")) {
+          this.$router.push("/");
         }
       }
     }
+  },
+  computed: {
+    success() {
+      return this.$store.state.oauth.isSuccess;
+    },
+    loading() {
+      return this.$store.state.oauth.isLoading;
+    },
+    failure() {
+      return this.$store.state.oauth.isFailure;
+    }
   }
+  // watch: {
+  //   failure() {
+  //     this.snackbarVal = true;
+  //   }
+  // }
 };
 </script>
 

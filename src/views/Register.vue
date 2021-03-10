@@ -42,7 +42,7 @@
                   <v-btn
                     color="primary"
                     class="mt-3 text-capitalize"
-                    @click="submitGo"
+                    @click="register"
                   >
                     Register
                   </v-btn>
@@ -63,59 +63,60 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data: () => ({
     valid: false,
-    phone: '',
-    password: '',
-    country: '',
+    phone: "",
+    password: "",
+    country: "",
     phoneRules: [
-      (v) => !!v || 'Phone is required',
-      (v) => /^[0-9]{1,20}$/.test(v) || 'Phone must number',
+      v => !!v || "Phone is required",
+      v => /^[0-9]{1,20}$/.test(v) || "Phone must number"
     ],
     passwordRules: [
-      (v) => !!v || 'Password is required',
-      (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
-        || 'Password must minimum 8 character, at least one letter and one number ',
+      v => !!v || "Password is required",
+      v =>
+        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v) ||
+        "Password must minimum 8 character, at least one letter and one number "
     ],
     countryRules: [
-      (v) => !!v || 'Country is required',
-      (v) => v.length >= 3 || 'Country must mininal 3 character',
-    ],
+      v => !!v || "Country is required",
+      v => v.length >= 3 || "Country must mininal 3 character"
+    ]
   }),
   methods: {
-    async submitGo() {
-      if (this.valid) {
-        const arrPhone = this.phone.split('');
+    async register() {
+      if (this.valid && this.phone && this.password && this.country) {
+        const arrPhone = this.phone.split("");
         arrPhone.splice(0, 1);
-        arrPhone.unshift('62');
-        const newPhone = arrPhone.join('');
+        arrPhone.unshift("62");
+        const newPhone = arrPhone.join("");
         const payload = {
           phone: newPhone,
           password: this.password,
           country: this.country,
           latlong: newPhone,
           device_token: newPhone,
-          device_type: 2,
+          device_type: 2
         };
         console.log(payload);
         try {
-          const proxyCors = 'https://safe-ravine-02458.herokuapp.com/';
+          const proxyCors = "https://safe-ravine-02458.herokuapp.com/";
           const instanceAxios = axios.create({
             baseURL: `${proxyCors}http://pretest-qa.dcidev.id/api/v1`,
-            withCredentials: false,
+            withCredentials: false
           });
-          const res = await instanceAxios.post('/register', payload);
+          const res = await instanceAxios.post("/register", payload);
           console.log(res);
         } catch (err) {
           console.log(err);
         }
         // console.log(payload);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
