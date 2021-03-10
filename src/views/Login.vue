@@ -113,7 +113,9 @@ export default {
           device_type: 2
         };
         await this.$store.dispatch("oauth/getData", payload);
-        if (this.failure) {
+        if (this.success) {
+          this.$router.push("/");
+        } else if (this.failure) {
           if (this.failure === "Password is incorrect") {
             this.snackbarVal = true;
             this.$refs["password"].focus();
@@ -122,9 +124,6 @@ export default {
             this.$refs["phone"].focus();
           }
         }
-        // if (localStorage.getItem("token")) {
-        //   this.$router.push("/");
-        // }
       }
     }
   },

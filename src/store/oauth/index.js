@@ -21,7 +21,7 @@ const oauth = {
     },
   },
   actions: {
-    async getData({ commit }, payload) {
+    async getData({ commit, state }, payload) {
       console.log(payload);
       commit('setLoading', true);
       const res = await sign_in(payload);
@@ -38,6 +38,7 @@ const oauth = {
         }
       } else {
         commit('setSuccess', res);
+        console.log(state.isSuccess);
         localStorage.setItem('token', res.data.user.access_token);
         // this.$router.push("/");
       }
