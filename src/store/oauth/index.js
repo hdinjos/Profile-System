@@ -21,24 +21,32 @@ const oauth = {
     },
   },
   actions: {
-    async getData({ commit, state }, payload) {
+    async getData({ commit }, payload) {
       console.log(payload);
       commit('setLoading', true);
       const res = await sign_in(payload);
+      console.log(res.name);
       if (res.name === 'Error') {
-        const errMsg = res.response.data.error.errors[0].indexOf('phone')
-        if (errMsg + 1) {
-          const msgA = 'The phone is not registered'
-          commit('setFailure', msgA)
-          console.log("The phone is not registered");
+        if (!res.response) {
+          commit('setLoading', false);
+          commit('setFailure', 'Network Error');
+          console.log('haloooooo')
         } else {
-          const msgB = 'Password is incorrect'
-          commit('setFailure', msgB)
-          console.log('Password is incorrect');
+          const errMsg = res.response.data.error.errors[0].indexOf('phone')
+          if (errMsg + 1) {
+            const msgA = 'The phone is not registered'
+            commit('setFailure', msgA)
+            console.log("The phone is not registered");
+          } else {
+            const msgB = 'Password is incorrect'
+            commit('setFailure', msgB)
+            console.log('Password is incorrect');
+          }
         }
+
       } else {
         commit('setSuccess', res);
-        console.log(state.isSuccess);
+        // console.log(state.isSuccess);
         localStorage.setItem('token', res.data.user.access_token);
         // this.$router.push("/");
       }

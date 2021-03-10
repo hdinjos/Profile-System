@@ -26,7 +26,9 @@
                 label="Password"
                 required
                 outlined
-                type="password"
+                :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="() => (value = !value)"
+                :type="value ? 'password' : 'text'"
               ></v-text-field>
               <v-text-field
                 dense
@@ -67,6 +69,7 @@ import axios from "axios";
 
 export default {
   data: () => ({
+    value: "password",
     valid: false,
     phone: "",
     password: "",
@@ -77,13 +80,14 @@ export default {
     ],
     passwordRules: [
       v => !!v || "Password is required",
-      v =>
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v) ||
-        "Password must minimum 8 character, at least one letter and one number "
+      v => v.length >= 8 || "Password minimum 8 characters"
+      // v =>
+      //   /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v) ||
+      //   "Password must minimum 8 character, at least one letter and one number"
     ],
     countryRules: [
       v => !!v || "Country is required",
-      v => v.length >= 3 || "Country must mininal 3 character"
+      v => v.length >= 3 || "Country must mininal 3 characters"
     ]
   }),
   methods: {
