@@ -28,9 +28,7 @@ const oauth = {
       console.log(res.name);
       if (res.name === 'Error') {
         if (!res.response) {
-          commit('setLoading', false);
           commit('setFailure', 'Network Error');
-          console.log('haloooooo')
         } else {
           const errMsg = res.response.data.error.errors[0].indexOf('phone')
           if (errMsg + 1) {
