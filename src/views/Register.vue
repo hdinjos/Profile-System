@@ -17,6 +17,8 @@
                 label="Phone"
                 required
                 outlined
+                :loading="loading"
+                ref="phone"
               ></v-text-field>
 
               <v-text-field
@@ -61,14 +63,30 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar top v-model="snackbarVal" :timeout="timeout" color="red">
+      {{ failure }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          x-small
+          outlined
+          v-bind="attrs"
+          @click="snackbarVal = false"
+          icon
+          color="white"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data: () => ({
+    snackbarVal: false,
+    timeout: 10000,
     value: "password",
     valid: false,
     phone: "",
@@ -105,20 +123,27 @@ export default {
           device_token: newPhone,
           device_type: 2
         };
-        console.log(payload);
-        try {
-          const proxyCors = "https://safe-ravine-02458.herokuapp.com/";
-          const instanceAxios = axios.create({
-            baseURL: `${proxyCors}http://pretest-qa.dcidev.id/api/v1`,
-            withCredentials: false
-          });
-          const res = await instanceAxios.post("/register", payload);
-          console.log(res);
-        } catch (err) {
-          console.log(err);
+        await this.$store.dispatch("registration/callRegister", payload);
+        if (this.success) {
+          this.$router.push("/verify");
+        } else {
+          this.snackbarVal = true;
+          this.$refs.phone.focus();
         }
-        // console.log(payload);
+        console.log(payload);
+        console.log(this.failure);
       }
+    }
+  },
+  computed: {
+    success() {
+      return this.$store.state.registration.isSuccess;
+    },
+    loading() {
+      return this.$store.state.registration.isLoading;
+    },
+    failure() {
+      return this.$store.state.registration.isFailure;
     }
   }
 };

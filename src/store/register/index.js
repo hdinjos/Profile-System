@@ -32,7 +32,7 @@ const registration = {
         }
       } else {
         commit('setSuccess', res);
-        localStorage.setItem('user_id', res.data.user.id);
+        localStorage.setItem('user_data', JSON.stringify(res));
       }
 
     }
