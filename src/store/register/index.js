@@ -1,4 +1,4 @@
-import { register } from '../../services/register';
+import { register, otpResend, otpMatch } from '../../services/register';
 
 const registration = {
   namespaced: true,
@@ -34,7 +34,25 @@ const registration = {
         commit('setSuccess', res);
         localStorage.setItem('user_data', JSON.stringify(res));
       }
-
+    },
+    async resendCode({ commit }, payload) {
+      commit('setLoading', true);
+      const res = await otpResend(payload);
+      if (res.name === 'Error') {
+        commit('setLoading', false);
+      } else {
+        commit('setLoading', false);
+      }
+    },
+    async verifyAccount({ commit }, payload) {
+      commit('setLoading', true);
+      const res = await otpMatch(payload);
+      if (res.name === 'Error') {
+        commit('setLoading', false);
+      } else {
+        commit('setSuccess', res);
+        localStorage.setItem('token', res.data.user.access_token);
+      }
     }
   },
   getters: {
