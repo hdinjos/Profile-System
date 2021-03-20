@@ -83,6 +83,7 @@
                       depressed
                       fab
                       color="primary"
+                      @click="editProfile"
                     >
                       <v-icon color="white">mdi-square-edit-outline</v-icon>
                     </v-btn>
@@ -93,6 +94,10 @@
             </v-speed-dial>
           </v-card>
         </v-col>
+        <EditProfileDialog
+          :editProfileDialog="editProfileDialog"
+          :editProfile="editProfile"
+        />
         <v-col cols="12" sm="6" md="8">
           <v-row>
             <v-col cols="12">
@@ -208,10 +213,12 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import EditProfileDialog from "@/components/EditProfileDialog.vue";
 
 export default {
   name: "Home",
   data: () => ({
+    editProfileDialog: false,
     user: {
       initials: "JD",
       fullName: "John Doe",
@@ -229,6 +236,12 @@ export default {
   }),
   components: {
     Header,
+    EditProfileDialog,
+  },
+  methods: {
+    editProfile() {
+      this.editProfileDialog = !this.editProfileDialog;
+    },
   },
 };
 </script>
