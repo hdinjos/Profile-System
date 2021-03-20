@@ -63,119 +63,147 @@
       </v-row>
       <v-avatar
         size="200"
-        style="position: absolute; z-index: 1; left: 30vh; top: 26vh"
+        style="position: absolute; z-index: 1; left: 37vh; top: 26vh"
       >
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
       <v-row class="my-2">
-        <v-col cols="3" style="margin-top: 15vh">
-          <v-card height="65vh">
-            <div
+        <v-col cols="12" sm="6" md="4" style="margin-top: 15vh">
+          <div class="headline">Profile</div>
+          <v-card class="px-4 pt-2 pb-12" max-height="100vh">
+            <!-- <div
               class="px-3 py-3 d-flex flex-column justify-space-between"
               style="height: 65vh"
-            >
-              <div v-for="(sub, index) in subs" :key="index">
-                <div class="subtitle-1 font-weight-bold">{{ sub }}</div>
-                <div class="body-2">
-                  {{
-                    index === 0
-                      ? profile.name
-                      : "data belum ada" && index === 1
-                      ? profile.gender
-                      : "data belum ada" && index === 2
-                      ? profile.birthday
-                      : "data belum ada" && index === 3
-                      ? profile.hometown
-                      : "data belum ada" && index === 4
-                      ? profile.bio
-                      : "data belum ada"
-                  }}
-                </div>
-              </div>
-
-              <!-- <v-list-item two-line v-for="(sub, index) in subs" :key="index">
-              <v-list-item-content>
-                <v-list-item-title>{{ sub }}</v-list-item-title>
-                <v-list-item-subtitle>
-                  Secondary text dfsdf fds fvdv dvfv fvdfv dvfds d dfvdf
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item> -->
-              <!-- <div>Name</div>
-            <div>gender</div>
-            <div>Birthday</div>
-            <div>Hometown</div>
-            <div>bio</div> -->
-              <!-- <v-spacer></v-spacer> -->
-              <div class="d-flex justify-end">
-                <v-card-actions class="pa-1">
-                  <v-btn color="black" class="text-capitalize" outlined>
-                    <v-icon>mdi-card-account-details</v-icon>
-                    <span class="ml-1"> Edit Profile</span>
-                  </v-btn>
-                </v-card-actions>
+            > -->
+            <div class="pb-3" v-for="(sub, index) in subs" :key="index">
+              <div class="subtitle-1 font-weight-bold">{{ sub }}</div>
+              <div class="body-2">
+                {{
+                  index === 0
+                    ? profile.name
+                    : "data belum ada" && index === 1
+                    ? profile.gender
+                    : "data belum ada" && index === 2
+                    ? profile.birthday
+                    : "data belum ada" && index === 3
+                    ? profile.hometown
+                    : "data belum ada" && index === 4
+                    ? profile.bio
+                    : "data belum ada"
+                }}
               </div>
             </div>
+            <v-speed-dial right bottom absolute>
+              <template v-slot:activator>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      small
+                      depressed
+                      fab
+                      color="primary"
+                    >
+                      <v-icon color="white">mdi-square-edit-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Edit Profile</span>
+                </v-tooltip>
+              </template>
+            </v-speed-dial>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="6" md="8">
           <v-row>
-            <v-col cols="6">
-              <v-card height="33vh" cols="4">
-                <div class="d-flex justify-end">
-                  <v-card-actions>
-                    <v-btn
-                      color="black"
-                      class="mr-2 my-2 text-capitalize"
-                      outlined
-                    >
-                      <v-icon>mdi-domain</v-icon>
-                      <span class="ml-1"> Edit Career</span>
-                    </v-btn>
-                  </v-card-actions>
-                </div>
-                <!-- <v-btn
-                  color="black"
-                  class="text-capitalize"
-                  absolute
-                  bottom
-                  right
-                  outlined
-                >
-                  <v-icon>mdi-domain</v-icon>
-                  <span class="ml-1"> Edit Career</span>
-                </v-btn> -->
+            <v-col cols="12">
+              <div class="headline">Careers</div>
+              <v-card class="px-4 pt-2 pb-12" max-height="33vh">
+                <v-row align="center" style="height: 27vh" class="text-center">
+                  <v-col cols="12" md="4">
+                    <div class="subtitle-1 font-weight-bold">Company Name</div>
+                    <div class="body-2">Praxis Academy</div>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <div class="subtitle-1 font-weight-bold">Starting From</div>
+                    <div class="body-2">21/04/2020</div>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <div class="subtitle-1 font-weight-bold">Ending In</div>
+                    <div class="body-2">24/10/2020</div>
+                  </v-col>
+                </v-row>
+                <v-speed-dial right bottom absolute>
+                  <template v-slot:activator>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          small
+                          depressed
+                          fab
+                          color="primary"
+                        >
+                          <v-icon color="white">mdi-square-edit-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Edit Careers</span>
+                    </v-tooltip>
+                  </template>
+                </v-speed-dial>
               </v-card>
             </v-col>
-            <v-col cols="6">
-              <v-card height="33vh" cols="4">
-                <v-btn
-                  color="black"
-                  class="text-capitalize"
-                  absolute
-                  bottom
-                  right
-                  outlined
-                >
-                  <v-icon>mdi-school</v-icon>
-                  <span class="ml-1"> Edit Education</span>
-                </v-btn>
+
+            <v-col cols="12">
+              <div class="headline">Educations</div>
+              <v-card class="px-4 pt-2 pb-12" max-height="33vh" cols="4">
+                <v-row align="center" style="height: 27vh" class="text-center">
+                  <v-col cols="12" md="7">
+                    <div class="subtitle-1 font-weight-bold">School Name</div>
+                    <div class="body-2">SMK Tunas Harapan Pati</div>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <div class="subtitle-1 font-weight-bold">
+                      Graduation Time
+                    </div>
+                    <div class="body-2">21/05/215</div>
+                  </v-col>
+                </v-row>
+                <v-speed-dial right bottom absolute>
+                  <template v-slot:activator>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          small
+                          depressed
+                          fab
+                          color="primary"
+                        >
+                          <v-icon color="white">mdi-square-edit-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Edit Educations </span>
+                    </v-tooltip>
+                  </template>
+                </v-speed-dial>
               </v-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="6">
-              <v-card height="33vh" cols="4"></v-card>
-            </v-col>
-            <v-col cols="6">
-              <v-card height="33vh" cols="4"></v-card>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
       <div class="headline">Galery</div>
       <v-row>
-        <v-col v-for="n in 12" :key="n" class="d-flex child-flex" cols="2">
+        <v-col
+          v-for="n in 12"
+          :key="n"
+          class="d-flex child-flex"
+          cols="12"
+          sm="4"
+          md="3"
+        >
           <v-card>
             <v-img
               :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
@@ -208,7 +236,7 @@ export default {
     user: {
       initials: "JD",
       fullName: "John Doe",
-      email: "john.doe@doe.com"
+      email: "john.doe@doe.com",
     },
     subs: ["Name", "Gender", "Birthday", "Hometown", "Bio"],
     profile: {
@@ -217,11 +245,11 @@ export default {
       birthday: "18 Maret 1997",
       hometown: "Pati",
       bio:
-        "Saya adalah seorang programmer entusias di bidang web khususnya frontend, pengalaman saya ini saya dapatkan dari mengikuti bootcamp di praxis academy dan saling diskusi dengan teman-teman yang bergelut dibidang yang sama"
-    }
+        "Saya adalah seorang programmer entusias di bidang web khususnya frontend, pengalaman saya ini saya dapatkan dari mengikuti bootcamp di praxis academy dan saling diskusi dengan teman-teman yang bergelut dibidang yang sama",
+    },
   }),
   components: {
-    Header
-  }
+    Header,
+  },
 };
 </script>

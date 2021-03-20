@@ -12,6 +12,7 @@ const subUrl = '/oauth';
 const sign_in = async (payload) => {
   try {
     const res = await urlApi.post(`${subUrl}/sign_in`, payload);
+    console.log(res.data);
     return res.data;
   } catch (err) {
     return err;
