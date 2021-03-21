@@ -6,11 +6,12 @@
         <v-col cols="12" class="d-flex child-flex">
           <v-card style="position: relative">
             <v-img
-              lazy-src="https://picsum.photos/id/11/10/6"
+              :lazy-src="dataImgCover"
               max-height="40vh"
               max-width="100wh"
-              src="https://picsum.photos/id/11/500/300"
+              :src="dataImgCover"
               class="grey lighten-2"
+              aspect-ratio="1"
             >
               <v-btn
                 color="white"
@@ -34,9 +35,23 @@
             </v-img>
             <div class="avatar">
               <v-img
-                class="avatar-img"
-                src="https://cdn.vuetifyjs.com/images/john.jpg"
+                class="grey lighten-2 avatar-img"
+                :src="dataImgUser"
+                :lazy-src="dataImgUser"
+                aspect-ratio="1"
               >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
               </v-img>
               <v-btn class="avatar-btn" depressed fab color="primary"
                 ><v-icon>mdi-camera</v-icon></v-btn
@@ -104,19 +119,37 @@
             <v-col cols="12">
               <div class="headline">Careers</div>
 
-              <v-card class="px-4 pt-2 pb-12" max-height="33vh">
+              <v-card v-if="dataUser" class="px-4 pt-2 pb-12" max-height="33vh">
                 <v-row align="center" style="height: 27vh" class="text-center">
                   <v-col cols="12" md="4">
                     <div class="subtitle-1 font-weight-bold">Company Name</div>
-                    <div class="body-2">Praxis Academy</div>
+                    <div class="body-2">
+                      {{
+                        dataCareer.company_name
+                          ? dataCareer.company_name
+                          : "Empty Data"
+                      }}
+                    </div>
                   </v-col>
                   <v-col cols="12" md="4">
                     <div class="subtitle-1 font-weight-bold">Starting From</div>
-                    <div class="body-2">21/04/2020</div>
+                    <div class="body-2">
+                      {{
+                        dataCareer.starting_from
+                          ? dataCareer.starting_from
+                          : "Empty Data"
+                      }}
+                    </div>
                   </v-col>
                   <v-col cols="12" md="4">
                     <div class="subtitle-1 font-weight-bold">Ending In</div>
-                    <div class="body-2">24/10/2020</div>
+                    <div class="body-2">
+                      {{
+                        dataCareer.ending_in
+                          ? dataCareer.ending_in
+                          : "Empty Data"
+                      }}
+                    </div>
                   </v-col>
                 </v-row>
                 <v-speed-dial right bottom absolute>
@@ -139,21 +172,43 @@
                   </template>
                 </v-speed-dial>
               </v-card>
+              <v-skeleton-loader
+                v-else
+                max-height="100vh"
+                type="list-item-three-line@2, actions"
+              ></v-skeleton-loader>
             </v-col>
 
             <v-col cols="12">
               <div class="headline">Educations</div>
-              <v-card class="px-4 pt-2 pb-12" max-height="33vh" cols="4">
+              <v-card
+                v-if="dataUser"
+                class="px-4 pt-2 pb-12"
+                max-height="33vh"
+                cols="4"
+              >
                 <v-row align="center" style="height: 27vh" class="text-center">
                   <v-col cols="12" md="7">
                     <div class="subtitle-1 font-weight-bold">School Name</div>
-                    <div class="body-2">SMK Tunas Harapan Pati</div>
+                    <div class="body-2">
+                      {{
+                        !dataEducation.school_name
+                          ? "Empty Data"
+                          : dataEducation.school_name
+                      }}
+                    </div>
                   </v-col>
                   <v-col cols="12" md="3">
                     <div class="subtitle-1 font-weight-bold">
                       Graduation Time
                     </div>
-                    <div class="body-2">21/05/215</div>
+                    <div class="body-2">
+                      {{
+                        !dataEducation.graduation_time
+                          ? "Empty Data"
+                          : dataEducation.graduation_time
+                      }}
+                    </div>
                   </v-col>
                 </v-row>
                 <v-speed-dial right bottom absolute>
@@ -176,6 +231,11 @@
                   </template>
                 </v-speed-dial>
               </v-card>
+              <v-skeleton-loader
+                v-else
+                max-height="100vh"
+                type="list-item-three-line@2, actions"
+              ></v-skeleton-loader>
             </v-col>
           </v-row>
         </v-col>
@@ -183,8 +243,8 @@
       <div class="headline">Galery</div>
       <v-row>
         <v-col
-          v-for="n in 4"
-          :key="n"
+          v-for="img in dataListImgUser"
+          :key="img.id"
           class="d-flex child-flex"
           cols="12"
           sm="4"
@@ -192,8 +252,8 @@
         >
           <v-card>
             <v-img
-              :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-              :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+              :src="img.picture.url"
+              :lazy-src="img.picture.url"
               aspect-ratio="1"
               class="grey lighten-2"
             >
@@ -226,20 +286,7 @@ export default {
   },
   data: () => ({
     editProfileDialog: false,
-    user: {
-      initials: "JD",
-      fullName: "John Doe",
-      email: "john.doe@doe.com",
-    },
     subs: ["Name", "Gender", "Birthday", "Hometown", "Bio"],
-    profile: {
-      name: "hendi",
-      gender: "laki-laki",
-      birthday: "18 Maret 1997",
-      hometown: "Pati",
-      bio:
-        "Saya adalah seorang programmer entusias di bidang web khususnya frontend, pengalaman saya ini saya dapatkan dari mengikuti bootcamp di praxis academy dan saling diskusi dengan teman-teman yang bergelut dibidang yang sama",
-    },
   }),
   components: {
     Header,
@@ -255,14 +302,6 @@ export default {
       return this.$store.state.profile.isSuccess;
     },
     dataProfile() {
-      // return {
-      //   ...this.dataUser,
-      //   name: this.dataUser.data.user.name,
-      //   gender: this.dataUser.data.user.gender,
-      //   birthday: this.dataUser.data.user.birthday,
-      //   hometown: this.dataUser.data.user.hometown,
-      //   bio: this.dataUser.data.user.bio,
-      // };
       if (this.dataUser) {
         return this.dataUser.data.user;
       } else {
@@ -275,11 +314,48 @@ export default {
         };
       }
     },
-    // dataCareer(){
-    //   if (this.dataUser) {
-    //     return this.dataUser
-    //   }
-    // }
+    dataCareer() {
+      if (this.dataUser) {
+        return this.dataUser.data.user.career;
+      } else {
+        return {
+          company_name: "",
+          ending_in: "",
+          starting_from: "",
+        };
+      }
+    },
+    dataEducation() {
+      if (this.dataUser) {
+        return this.dataUser.data.user.education;
+      } else {
+        return {
+          school_name: "",
+          graduation_time: "",
+        };
+      }
+    },
+    dataImgUser() {
+      if (this.dataUser) {
+        return this.dataUser.data.user.user_picture.picture.url;
+      } else {
+        return "";
+      }
+    },
+    dataImgCover() {
+      if (this.dataUser) {
+        return this.dataUser.data.user.cover_picture.url;
+      } else {
+        return "";
+      }
+    },
+    dataListImgUser() {
+      if (this.dataUser) {
+        return this.dataUser.data.user.user_pictures;
+      } else {
+        return [];
+      }
+    },
   },
   created() {
     (async () => {
