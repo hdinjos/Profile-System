@@ -17,7 +17,18 @@ const sign_in = async (payload) => {
     return err;
   }
 }
-const credentials = () => urlApi.get(`${subUrl}/credentials`);
+const credentials = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const params = {
+      access_token: token
+    }
+    const res = await urlApi.get(`${subUrl}/credentials`, { params });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 const revoke = (payload) => urlApi.post(`${subUrl}/revoke`, payload);
 
 export {
