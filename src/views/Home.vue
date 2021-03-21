@@ -210,12 +210,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- <v-sheet
-      :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
-      class="pa-3"
-    > -->
-
-    <!-- </v-sheet> -->
   </div>
 </template>
 
