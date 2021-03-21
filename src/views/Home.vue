@@ -49,25 +49,21 @@
       <v-row class="my-2">
         <v-col cols="12" sm="6" md="4" class="profile" style="">
           <div class="headline">Profile</div>
-          <v-card class="px-4 pt-2 pb-12" max-height="100vh">
-            <!-- <div
-              class="px-3 py-3 d-flex flex-column justify-space-between"
-              style="height: 65vh"
-            > -->
+          <v-card v-if="dataUser" class="px-4 pt-2 pb-12" max-height="100vh">
             <div class="pb-3" v-for="(sub, index) in subs" :key="index">
               <div class="subtitle-1 font-weight-bold">{{ sub }}</div>
               <div class="body-2">
                 {{
                   index === 0
-                    ? profile.name
+                    ? dataProfile.name
                     : "data belum ada" && index === 1
-                    ? profile.gender
+                    ? dataProfile.gender
                     : "data belum ada" && index === 2
-                    ? profile.birthday
+                    ? dataProfile.birthday
                     : "data belum ada" && index === 3
-                    ? profile.hometown
+                    ? dataProfile.hometown
                     : "data belum ada" && index === 4
-                    ? profile.bio
+                    ? dataProfile.bio
                     : "data belum ada"
                 }}
               </div>
@@ -93,6 +89,11 @@
               </template>
             </v-speed-dial>
           </v-card>
+          <v-skeleton-loader
+            v-else
+            max-height="100vh"
+            type="list-item-three-line@4, actions"
+          ></v-skeleton-loader>
         </v-col>
         <EditProfileDialog
           :editProfileDialog="editProfileDialog"
@@ -102,6 +103,7 @@
           <v-row>
             <v-col cols="12">
               <div class="headline">Careers</div>
+
               <v-card class="px-4 pt-2 pb-12" max-height="33vh">
                 <v-row align="center" style="height: 27vh" class="text-center">
                   <v-col cols="12" md="4">
@@ -208,6 +210,12 @@
         </v-col>
       </v-row>
     </v-container>
+    <!-- <v-sheet
+      :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
+      class="pa-3"
+    > -->
+
+    <!-- </v-sheet> -->
   </div>
 </template>
 
@@ -217,6 +225,11 @@ import EditProfileDialog from "@/components/EditProfileDialog.vue";
 
 export default {
   name: "Home",
+  inject: {
+    theme: {
+      default: { isDark: false },
+    },
+  },
   data: () => ({
     editProfileDialog: false,
     user: {
@@ -242,6 +255,43 @@ export default {
     editProfile() {
       this.editProfileDialog = !this.editProfileDialog;
     },
+  },
+  computed: {
+    dataUser() {
+      return this.$store.state.profile.isSuccess;
+    },
+    dataProfile() {
+      // return {
+      //   ...this.dataUser,
+      //   name: this.dataUser.data.user.name,
+      //   gender: this.dataUser.data.user.gender,
+      //   birthday: this.dataUser.data.user.birthday,
+      //   hometown: this.dataUser.data.user.hometown,
+      //   bio: this.dataUser.data.user.bio,
+      // };
+      if (this.dataUser) {
+        return this.dataUser.data.user;
+      } else {
+        return {
+          name: "",
+          gender: "",
+          birthday: "",
+          hometown: "",
+          bio: "",
+        };
+      }
+    },
+    // dataCareer(){
+    //   if (this.dataUser) {
+    //     return this.dataUser
+    //   }
+    // }
+  },
+  created() {
+    (async () => {
+      await this.$store.dispatch("profile/callGetProfile");
+      console.log("halo bosq", this.$store.state.profile.isSuccess);
+    })();
   },
 };
 </script>
