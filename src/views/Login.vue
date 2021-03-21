@@ -88,15 +88,15 @@ export default {
     phone: "",
     password: "",
     phoneRules: [
-      v => !!v || "Phone is required",
-      v => /^[0-9]{1,20}$/.test(v) || "Phone must number"
+      (v) => !!v || "Phone is required",
+      (v) => /^[0-9]{1,20}$/.test(v) || "Phone must number",
     ],
     passwordRules: [
-      v => !!v || "Password is required",
-      v => v.length >= 8 || "Password minimum 8 characters"
+      (v) => !!v || "Password is required",
+      (v) => v.length >= 8 || "Password minimum 8 characters",
       // (v) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v)
       //   || 'Password must minimum 8 character, at least one letter and one number ',
-    ]
+    ],
   }),
   methods: {
     async logIn() {
@@ -110,7 +110,7 @@ export default {
           password: this.password,
           latlong: newPhone,
           device_token: newPhone,
-          device_type: 2
+          device_type: 2,
         };
         await this.$store.dispatch("oauth/getData", payload);
         if (this.success) {
@@ -123,21 +123,25 @@ export default {
             this.snackbarVal = true;
             this.$refs["phone"].focus();
           }
+        } else {
+          console.log("salah di sini login page");
         }
       }
-    }
+    },
   },
   computed: {
     success() {
-      return this.$store.state.oauth.isSuccess;
+      return (
+        this.$store.state.oauth.isSuccess && this.$store.state.profile.isSuccess
+      );
     },
     loading() {
       return this.$store.state.oauth.isLoading;
     },
     failure() {
       return this.$store.state.oauth.isFailure;
-    }
-  }
+    },
+  },
   // watch: {
   //   failure() {
   //     this.snackbarVal = true;

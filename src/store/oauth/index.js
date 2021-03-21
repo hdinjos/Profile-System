@@ -1,4 +1,5 @@
-import { sign_in } from '../../services/oauth';
+import { sign_in, credentials } from '../../services/oauth';
+import store from '../../store';
 
 const oauth = {
   namespaced: true,
@@ -43,10 +44,10 @@ const oauth = {
         }
 
       } else {
-        commit('setSuccess', res);
-        // console.log(state.isSuccess);
         localStorage.setItem('token', res.data.user.access_token);
-        // this.$router.push("/");
+        const resCredential = await credentials();
+        commit('setSuccess', res);
+        store.commit('profile/setSuccess', resCredential);
       }
     }
   },
