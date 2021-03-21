@@ -5,6 +5,7 @@ const subUrl = '/profile';
 const getProfile = async () => {
   try {
     const res = await urlApi.get(`${subUrl}/me`);
+    console.log('di service', res.data);
     return res.data;
   } catch (err) {
     return err;
@@ -14,6 +15,7 @@ const getProfile = async () => {
 const setProfile = async (payload) => {
   try {
     const res = await urlApi.post(`${subUrl}`, payload);
+    return res.data;
   } catch (err) {
     return err;
   }
